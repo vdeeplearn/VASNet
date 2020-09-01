@@ -93,8 +93,11 @@ class VASNet(nn.Module):
         # Assumes input batch size = 1.
         x = x.view(-1, m)
         y, att_weights_ = self.att(x)
-
+        
+        print(f'Shape of y after attention is {y.shape}' )
+        
         y = y + x
+        print(f'Shape of y after adding x is {y.shape}' )
         y = self.drop50(y)
         y = self.layer_norm_y(y)
 
@@ -106,8 +109,11 @@ class VASNet(nn.Module):
         y = self.layer_norm_ka(y)
 
         y = self.kd(y)
+        print(f'Shape of y before sigmod is {y.shape}' )
         y = self.sig(y)
+        print(f'Shape of y after sigmod is {y.shape}' )
         y = y.view(1, -1)
+        print(f'Shape of y after view is {y.shape}' )
 
         return y, att_weights_
 
